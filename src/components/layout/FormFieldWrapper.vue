@@ -1,5 +1,5 @@
 <template>
-  <div class="field">
+  <div class="field field-group">
     <span class="p-float-label">
       <slot></slot>
     </span>

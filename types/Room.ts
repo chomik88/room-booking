@@ -1,11 +1,13 @@
 import type Facility from "./Facility";
 
-type Hotel = {
+type Room = {
   id?: string;
   name: string;
+  capacity: number;
   description: string;
+  images: [] | null;
   facilities: Facility[] | null;
-  images: string[] | null;
+  pricePerNight: number;
 };
 
-export default Hotel;
+export default Room;

@@ -19,6 +19,11 @@ export default {
         to: "/",
         key: "home",
       },
+      {
+        label: "Dictionary",
+        to: "/dictionaries",
+        key: "dictionary",
+      },
     ]);
 
     return {
