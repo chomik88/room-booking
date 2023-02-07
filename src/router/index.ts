@@ -4,7 +4,8 @@ import AddNewHotel from "@/views/AddNewHotel.vue";
 import HotelDetails from "@/views/HotelDetails.vue";
 import AddHotelRooms from "@/components/hotels/AddHotelRooms.vue";
 import EditHotel from "@/views/EditHotel.vue";
-import Dictionaries from "@/views/Dictionaries.vue";
+import AppDictionaries from "@/views/AppDictionaries.vue";
+import DictionaryWrapper from "@/components/dictionaries/DictionaryWrapper.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +40,20 @@ const router = createRouter({
     {
       path: "/dictionaries",
       name: "dictionaries",
-      component: Dictionaries,
+      component: AppDictionaries,
+      redirect: "/dictionaries/hotel-facilities",
+      children: [
+        {
+          path: "hotel-facilities",
+          name: "hotel-facilities",
+          component: DictionaryWrapper,
+        },
+        {
+          path: "room-facilities",
+          name: "room-facilities",
+          component: DictionaryWrapper,
+        },
+      ],
     },
   ],
 });
