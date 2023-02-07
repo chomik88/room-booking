@@ -10,7 +10,7 @@
       <div v-if="isLoading">
         <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" />
       </div>
-      <ul class="hotel-list">
+      <ul class="hotel-list" v-else>
         <HotelItem v-for="hotel in hotels" :key="hotel.id" :data="hotel" />
       </ul>
     </template>

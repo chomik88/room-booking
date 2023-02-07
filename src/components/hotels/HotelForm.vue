@@ -2,7 +2,7 @@
   <form @submit.prevent="handleSubmit">
     <FormFieldWrapper>
       <InputText id="name" type="text" v-model="form.name" />
-      <label for="username">Hotel name</label>
+      <label for="name">Hotel name</label>
     </FormFieldWrapper>
     <FormFieldWrapper>
       <PTextarea
@@ -46,28 +46,27 @@ import FileUpload, {
   type FileUploadRemoveUploadedFile,
 } from "primevue/fileupload";
 import { uploadImagesService } from "@/services/imagesService";
+import { useDictionariesStore } from "@/stores/dictionaries";
 
 export default defineComponent({
   name: "HotelForm",
   components: { FormFieldWrapper, MultiSelect, FileUpload },
   setup(props: any, { emit }) {
     const hotelsStore = useHotelsStore();
+    const dictionaryStore = useDictionariesStore();
     const fileUploader = ref();
+    const hotelFacilities =
+      dictionaryStore.getDictionaryByName("hotel-facilities")?.dictionaryItems;
     const form = reactive({
       name: "",
       description: "",
       images: [] as string[],
       facilities: null,
     });
-    const facilities = ref([
-      { name: "Meals", value: "meals" },
-      { name: "Wi-Fi", value: "wi-fi" },
-      { name: "Parking", value: "parking" },
-      { name: "Minibar", value: "minibar" },
-      { name: "Pets allowed", value: "pets-allowed" },
-      { name: "TV", value: "tv" },
-      { name: "Spa", value: "spa" },
-    ]);
+    const mappedFacilities = hotelFacilities
+      ? hotelFacilities.map((item) => ({ name: item.value, value: item.key }))
+      : null;
+    const facilities = ref(mappedFacilities);
 
     const handleSubmit = () => {
       if (fileUploader.value.hasFiles) {
