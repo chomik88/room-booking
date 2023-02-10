@@ -69,8 +69,10 @@ export default {
     const addNewRooms = () => {
       router.push({ name: "add-hotel-room", params: { id: route.params.id } });
     };
-    const removeHotel = () => {
-      hotelsStore.removeHotel(route.params.id);
+    const removeHotel = async () => {
+      await hotelsStore.removeHotel(route.params.id).then(() => {
+        router.push({ name: "home" });
+      });
     };
 
     const editHotel = () => {
