@@ -1,0 +1,23 @@
+.gallery {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+
+  &__item {
+    img {
+      border-radius: 4px;
+      aspect-ratio: 16/9;
+      display: block;
+      object-fit: cover;
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px){
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 425px){
+    grid-template-columns: 1fr;
+  }
+}
