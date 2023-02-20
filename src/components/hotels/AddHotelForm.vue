@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit">
+  <form @submit.prevent="addHotel">
     <FormFieldWrapper>
       <InputText id="name" type="text" v-model="form.name" />
       <label for="name">Hotel name</label>
@@ -49,7 +49,7 @@ import { uploadImagesService } from "@/services/imagesService";
 import { useDictionariesStore } from "@/stores/dictionaries";
 
 export default defineComponent({
-  name: "HotelForm",
+  name: "AddHotelForm",
   components: { FormFieldWrapper, MultiSelect, FileUpload },
   setup(props: any, { emit }) {
     const hotelsStore = useHotelsStore();
@@ -67,18 +67,15 @@ export default defineComponent({
       ? hotelFacilities.map((item) => ({ name: item.value, value: item.key }))
       : null;
     const facilities = ref(mappedFacilities);
-
-    const handleSubmit = () => {
-      if (fileUploader.value.hasFiles) {
-        fileUploader.value.upload();
-      } else {
-        addHotel();
-      }
-    };
+    const hotelId = ref(null);
 
     const addHotel = async () => {
       try {
-        await hotelsStore.addHotel(form);
+        const result = await hotelsStore.addHotel(form);
+        hotelId.value = result.name;
+        if (fileUploader.value.hasFiles) {
+          fileUploader.value.upload();
+        }
       } catch (error) {
         if (error instanceof Error) {
           emit("error", error.message);
@@ -87,10 +84,13 @@ export default defineComponent({
     };
 
     const uploadImages = async (files: FileUploadRemoveUploadedFile) => {
-      const result = await uploadImagesService(files.files);
+      const result = await uploadImagesService(
+        files.files,
+        String(hotelId.value)
+      );
       if (result && result.length) {
         form.images = result;
-        await addHotel();
+        await hotelsStore.updateHotel(form, String(hotelId.value));
       }
     };
 
@@ -98,7 +98,6 @@ export default defineComponent({
       form,
       facilities,
       addHotel,
-      handleSubmit,
       uploadImages,
       fileUploader,
     };

@@ -2,18 +2,18 @@
   <PCard>
     <template #content>
       <h1 class="mb-3">Add new hotel</h1>
-      <HotelForm @error="showError" />
+      <AddHotelForm @error="showError" />
     </template>
   </PCard>
   <PToast></PToast>
 </template>
 
 <script lang="ts">
-import HotelForm from "@/components/hotels/HotelForm.vue";
+import AddHotelForm from "@/components/hotels/AddHotelForm.vue";
 import { useToast } from "primevue/usetoast";
 export default {
   name: "AddNewHotel",
-  components: { HotelForm },
+  components: { AddHotelForm },
   setup() {
     const toast = useToast();
     const showError = (message: string) => {
