@@ -26,23 +26,6 @@ export const useHotelsStore = defineStore("hotels", {
       }));
     },
 
-    // async fetchHotel(hotelId: string) {
-    //   const response = await fetch(
-    //     `${import.meta.env.VITE_FIREBASE_URL}/hotels/${hotelId}.json`
-    //   );
-    //   const data = await response.json();
-    //   console.log(data);
-    //   const hotel = Object.keys(data).map((key) => ({
-    //     id: key,
-    //     ...data[key],
-    //   }));
-    //   console.log(hotel);
-    //   // this.hotels = Object.keys(data).map((key) => ({
-    //   //   id: key,
-    //   //   ...data[key],
-    //   // }));
-    // },
-
     async addHotel(data: Hotel) {
       const response = await fetch(
         `${import.meta.env.VITE_FIREBASE_URL}/hotels.json`,

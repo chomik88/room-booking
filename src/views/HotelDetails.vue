@@ -13,7 +13,7 @@
                 @click="editHotel"
                 class="p-button-help"
               />
-              <PButton label="Add Rooms" @click="addNewRooms" />
+              <PButton label="Show Rooms" @click="showRooms" />
               <PButton
                 label="Remove Hotel"
                 class="p-button-danger"
@@ -66,8 +66,8 @@ export default {
         galleryLoading.value = false;
       }
     };
-    const addNewRooms = () => {
-      router.push({ name: "add-hotel-room", params: { id: route.params.id } });
+    const showRooms = () => {
+      router.push({ name: "room-listing", params: { id: route.params.id } });
     };
     const removeHotel = async () => {
       await hotelsStore.removeHotel(route.params.id).then(() => {
@@ -82,7 +82,7 @@ export default {
     onMounted(() => getImages());
     return {
       hotel,
-      addNewRooms,
+      showRooms,
       removeHotel,
       editHotel,
       images,
