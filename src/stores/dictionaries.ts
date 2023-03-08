@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getDatabase, ref, push, onValue, remove } from "firebase/database";
+import { getDatabase, ref, push, remove, get } from "firebase/database";
 import type Dictionary from "../../types/Dictionary";
 import type DictionaryItem from "../../types/DictionaryItem";
 
@@ -20,24 +20,18 @@ export const useDictionariesStore = defineStore("dictionaries", {
     async fetchDictionaries() {
       const db = getDatabase();
       const dbRef = ref(db, "/dictionaries/");
-      onValue(dbRef, (snapshot) => {
-        const data = snapshot.val();
-        for (const dictionary in data) {
-          const stateDictionaries = this.$state.dictionaries;
-          const filteredDictionary = stateDictionaries?.find(
-            (item) => item.name === dictionary
-          );
-          if (filteredDictionary) {
-            const stateDictionary = data[dictionary];
-            filteredDictionary.dictionaryItems = Object.keys(
-              stateDictionary
-            ).map((key) => ({
-              id: key,
-              ...stateDictionary[key],
-            }));
-          }
-        }
-      });
+      const response = await get(dbRef);
+      const responseData = response.val();
+      const dictionariesArray = Object.keys(responseData).map((key) => ({
+        name: key,
+        dictionaryItems: Object.keys(responseData[key]).map(
+          (dictionaryItemKey) => ({
+            id: dictionaryItemKey,
+            ...responseData[key][dictionaryItemKey],
+          })
+        ),
+      }));
+      this.dictionaries = dictionariesArray;
     },
     async addDictionaryItems(data: DictionaryItem[], name: string) {
       const db = getDatabase();

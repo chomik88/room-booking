@@ -19,8 +19,8 @@ import Toast from "primevue/toast";
 import { VueFire } from "vuefire";
 import { firebaseApp } from "@/firebaseConfig";
 
-const app = createApp(App);
 const pinia = createPinia();
+const app = createApp(App);
 
 if (localStorage.getItem("state")) {
   pinia.state.value = JSON.parse(localStorage.getItem("state") || "");

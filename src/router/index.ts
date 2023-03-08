@@ -9,6 +9,10 @@ import DictionaryWrapper from "@/components/dictionaries/DictionaryWrapper.vue";
 import HotelRoomListing from "@/components/hotel-rooms/HotelRoomListing.vue";
 import EditHotelRoom from "@/components/hotel-rooms/EditHotelRoom.vue";
 import HotelRoomDetails from "@/components/hotel-rooms/HotelRoomDetails.vue";
+import AppAuth from "@/views/AppAuth.vue";
+import AuthRegister from "@/components/auth/AuthRegister.vue";
+import AuthLogin from "@/components/auth/AuthLogin.vue";
+import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,11 +26,13 @@ const router = createRouter({
       path: "/hotels/add",
       name: "add-hotel",
       component: AddNewHotel,
+      meta: { requiresAuth: true },
     },
     {
       path: "/hotels/:id",
       name: "hotel-details",
       component: HotelDetails,
+      meta: { requiresAuth: true },
       children: [
         {
           path: "rooms",
@@ -54,11 +60,13 @@ const router = createRouter({
       path: "/hotels/:id/edit",
       name: "edit-hotel",
       component: EditHotel,
+      meta: { requiresAuth: true },
     },
     {
       path: "/dictionaries",
       name: "dictionaries",
       component: AppDictionaries,
+      meta: { requiresAuth: true },
       redirect: "/dictionaries/hotel-facilities",
       children: [
         {
@@ -73,7 +81,32 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/auth",
+      name: "auth",
+      component: AppAuth,
+      redirect: "/auth/login",
+      children: [
+        {
+          path: "register",
+          name: "auth-register",
+          component: AuthRegister,
+        },
+        {
+          path: "login",
+          name: "auth-login",
+          component: AuthLogin,
+        },
+      ],
+    },
   ],
+});
+
+router.beforeEach((to) => {
+  const userStore = useUserStore();
+  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+    return "/auth";
+  }
 });
 
 export default router;
