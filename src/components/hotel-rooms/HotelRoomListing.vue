@@ -49,6 +49,8 @@ import { useRoute, useRouter } from "vue-router";
 import ProgressSpinner from "primevue/progressspinner";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import { useErrors } from "@/composables/errors";
+import { useConfirm } from "primevue/useconfirm";
 
 export default {
   name: "HotelRoomListing",
@@ -59,6 +61,8 @@ export default {
     const roomsStore = useRoomsStore();
     const isLoading = ref(false);
     const errorMsg = ref("");
+    const confirm = useConfirm();
+    const { showError } = useErrors();
     const rooms = computed(() => roomsStore.getRooms);
     const goToAddNewRoom = () => {
       router.push({ name: "add-hotel-room" });
@@ -85,7 +89,19 @@ export default {
     };
 
     const removeRoom = (id: string) => {
-      roomsStore.removeHotelRoom(id);
+      confirm.require({
+        message: "Are you sure you want to delete this room?",
+        header: "Confirmation",
+        accept: async () => {
+          try {
+            await roomsStore.removeHotelRoom(id);
+          } catch (error) {
+            showError(
+              error instanceof Error ? error.message : "Something went wrong"
+            );
+          }
+        },
+      });
     };
 
     onMounted(() => {

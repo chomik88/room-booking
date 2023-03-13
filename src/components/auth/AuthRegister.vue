@@ -36,7 +36,7 @@ import FormFieldWrapper from "@/components/layout/FormFieldWrapper.vue";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
-import { useToast } from "primevue/usetoast";
+import { useErrors } from "@/composables/errors";
 
 export default {
   name: "AuthRegister",
@@ -44,7 +44,6 @@ export default {
   setup() {
     const router = useRouter();
     const userStore = useUserStore();
-    const toast = useToast();
 
     const form = reactive({
       email: "",
@@ -52,14 +51,7 @@ export default {
       passwordRepeat: "",
     });
 
-    const showError = (message: string) => {
-      toast.add({
-        severity: "error",
-        summary: "Ops!",
-        detail: message,
-        life: 5000,
-      });
-    };
+    const { showError } = useErrors();
 
     const goToLogin = () => {
       router.push({ name: "auth-login" });

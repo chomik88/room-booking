@@ -18,6 +18,8 @@ import Textarea from "primevue/textarea";
 import Toast from "primevue/toast";
 import { VueFire } from "vuefire";
 import { firebaseApp } from "@/firebaseConfig";
+import ConfirmationService from "primevue/confirmationservice";
+import ConfirmDialog from "primevue/confirmdialog";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -41,6 +43,7 @@ app.use(ToastService);
 app.use(VueFire, {
   firebaseApp,
 });
+app.use(ConfirmationService);
 
 app.component("PCard", Card);
 app.component("PButton", Button);
@@ -48,5 +51,6 @@ app.component("InputText", InputText);
 app.component("InputNumber", InputNumber);
 app.component("PTextarea", Textarea);
 app.component("PToast", Toast);
+app.component("PConfirmDialog", ConfirmDialog);
 
 app.mount("#app");
