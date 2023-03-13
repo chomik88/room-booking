@@ -58,7 +58,8 @@ export const useUserStore = defineStore("user", {
     },
 
     async setAutoLogOutTimer() {
-      this.expiresIn = new Date().getTime() + 30000;
+      const minutesForAuth = 15;
+      this.expiresIn = new Date().getTime() + minutesForAuth * 60 * 1000;
       const expiresIn = this.expiresIn - new Date().getTime();
 
       if (expiresIn) {

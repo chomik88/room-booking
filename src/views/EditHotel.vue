@@ -10,21 +10,13 @@
 
 <script lang="ts">
 import EditHotelForm from "@/components/hotels/EditHotelForm.vue";
-import { useToast } from "primevue/usetoast";
+import { useErrors } from "@/composables/errors";
 
 export default {
   name: "EditHotel",
   components: { EditHotelForm },
   setup() {
-    const toast = useToast();
-    const showError = (message: string) => {
-      toast.add({
-        severity: "error",
-        summary: "Ops!",
-        detail: message,
-        life: 5000,
-      });
-    };
+    const { showError } = useErrors();
     return {
       showError,
     };

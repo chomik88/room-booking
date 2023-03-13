@@ -10,20 +10,12 @@
 
 <script lang="ts">
 import AddHotelForm from "@/components/hotels/AddHotelForm.vue";
-import { useToast } from "primevue/usetoast";
+import { useErrors } from "@/composables/errors";
 export default {
   name: "AddNewHotel",
   components: { AddHotelForm },
   setup() {
-    const toast = useToast();
-    const showError = (message: string) => {
-      toast.add({
-        severity: "error",
-        summary: "Ops!",
-        detail: message,
-        life: 5000,
-      });
-    };
+    const { showError } = useErrors();
     return {
       showError,
     };

@@ -68,6 +68,7 @@ export const useDictionariesStore = defineStore("dictionaries", {
     async removeDictionaryItem(item: string, name: string) {
       const db = getDatabase();
       await remove(ref(db, `/dictionaries/${name}/${item}`));
+      await this.fetchDictionaries();
     },
   },
 });

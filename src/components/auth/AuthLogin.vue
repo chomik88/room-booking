@@ -29,6 +29,7 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { useUserStore } from "@/stores/user";
+import { useErrors } from "@/composables/errors";
 
 export default {
   name: "AuthLogin",
@@ -36,7 +37,7 @@ export default {
   setup() {
     const router = useRouter();
     const userStore = useUserStore();
-    const toast = useToast();
+    const { showError } = useErrors();
     const form = reactive({
       email: "",
       password: "",
@@ -44,15 +45,6 @@ export default {
 
     const goToRegister = () => {
       router.push({ name: "auth-register" });
-    };
-
-    const showError = (message: string) => {
-      toast.add({
-        severity: "error",
-        summary: "Ops!",
-        detail: message,
-        life: 5000,
-      });
     };
 
     const loginUser = async () => {

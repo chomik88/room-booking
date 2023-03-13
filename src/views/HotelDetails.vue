@@ -37,6 +37,7 @@
         </div>
       </template>
     </PCard>
+    <PConfirmDialog />
   </div>
 </template>
 
@@ -46,6 +47,8 @@ import { computed, onMounted, ref } from "vue";
 import { useHotelsStore } from "@/stores/hotels";
 import { getHotelImages } from "@/services/imagesService";
 import GalleryImages from "@/components/layout/GalleryImages.vue";
+import { useConfirm } from "primevue/useconfirm";
+import { useErrors } from "@/composables/errors";
 
 export default {
   name: "HotelDetails",
@@ -57,6 +60,8 @@ export default {
     const hotel = computed(() => hotelsStore.getHotelById(route.params.id));
     const images = ref<string[] | undefined>([]);
     const galleryLoading = ref(false);
+    const confirm = useConfirm();
+    const { showError } = useErrors();
     const getImages = async () => {
       if (hotel.value && hotel.value.images) {
         galleryLoading.value = true;
@@ -70,8 +75,20 @@ export default {
       router.push({ name: "room-listing", params: { id: route.params.id } });
     };
     const removeHotel = async () => {
-      await hotelsStore.removeHotel(route.params.id).then(() => {
-        router.push({ name: "home" });
+      confirm.require({
+        message: "Do you want to remove this hotel?",
+        header: "Confirmation",
+        accept: async () => {
+          try {
+            await hotelsStore.removeHotel(route.params.id).then(() => {
+              router.push({ name: "home" });
+            });
+          } catch (error) {
+            showError(
+              error instanceof Error ? error.message : "Something went wrong"
+            );
+          }
+        },
       });
     };
 
